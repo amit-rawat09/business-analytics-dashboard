@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Performance & Revenue Analytics</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">B</span>
+        <div><strong>BizTrack</strong><small>ADMIN WORKSPACE</small></div>
+      </div>
+      <div class="nav-label">WORKSPACE</div>
+      <button class="nav-item active" data-section="overview">▦ <span>Overview</span></button>
+      <button class="nav-item" data-section="leads">◎ <span>Leads</span></button>
+      <button class="nav-item" data-section="quotations">▤ <span>Quotations</span></button>
+      <button class="nav-item" data-section="deals">◇ <span>Deals & Revenue</span></button>
+      <button class="nav-item" data-section="orders">▣ <span>Orders & Payments</span></button>
+      <div class="sidebar-bottom">
+        <div class="avatar">AR</div>
+        <div><strong>Admin User</strong><small>Administrator</small></div><span class="dots">•••</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="currentSection">Overview</strong></div>
+        <div class="top-actions"><span class="status-dot"></span><span class="live-text">Demo data</span><button class="icon-btn" title="Notifications">♧</button>
+          <div class="avatar small">AR</div>
+        </div>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">BUSINESS INTELLIGENCE</p>
+          <h1>Business Performance & Revenue Analytics</h1>
+          <p class="subtitle">Track leads, quotations, deals, orders and revenue in one place.</p>
+        </div>
+        <button class="primary-btn" id="exportBtn">↓ Export report</button>
+      </section>
+
+      <section class="filter-bar">
+        <div class="filter-title"><span class="filter-icon">☷</span>
+          <div><strong>Report filters</strong><small>Update the dashboard with a date range</small></div>
+        </div>
+        <div class="filter-controls">
+          <select id="dateFilter" aria-label="Date range">
+            <option value="today">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="custom">Custom range</option>
+          </select>
+          <div id="customDates" class="custom-dates hidden"><input type="date" id="startDate"><span>to</span><input type="date" id="endDate"></div>
+          <select id="teamFilter" aria-label="Team">
+            <option value="all">All teams</option>
+            <option value="sales">Sales</option>
+            <option value="operations">Operations</option>
+          </select>
+          <select id="sourceFilter" aria-label="Lead source">
+            <option value="all">All lead sources</option>
+            <option value="Google Ads">Google Ads</option>
+            <option value="Website">Website</option>
+            <option value="Referral">Referral</option>
+            <option value="Just Dial">Just Dial</option>
+          </select>
+          <button class="secondary-btn" id="resetBtn">Reset</button>
+        </div>
+      </section>
+      <div class="comparison-line"><span class="tiny-dot"></span><span id="rangeText">Showing last 30 days</span><span class="comparison-pill">Compared with previous equivalent period</span></div>
+
+      <section class="section-block" id="overviewSection">
+        <div class="section-title">
+          <div>
+            <h2>Lead analytics</h2>
+            <p>Lead generation and conversion performance</p>
+          </div><button class="text-btn" data-go="leads">View leads →</button>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="grid two-col">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Lead funnel</h3>
+                <p>Progress from new lead to deal</p>
+              </div><span class="panel-menu">•••</span>
+            </div>
+            <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Daily lead trend</h3>
+                <p>New and qualified leads over time</p>
+              </div><span class="legend-note"><i class="blue"></i>New <i class="green"></i>Qualified</span>
+            </div>
+            <div class="chart-wrap"><canvas id="leadTrendChart"></canvas></div>
+          </article>
+        </div>
+        <div class="grid two-col lower-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Lead sources</h3>
+                <p>Where leads are coming from</p>
+              </div>
+            </div>
+            <div class="chart-wrap short"><canvas id="sourceChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Lead status breakdown</h3>
+                <p>Current status of leads in this period</p>
+              </div>
+            </div>
+            <div class="chart-wrap short"><canvas id="statusChart"></canvas></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="quotationsSection">
+        <div class="section-title">
+          <div>
+            <h2>Quotation analytics</h2>
+            <p>Quotation volume, value and conversion performance</p>
+          </div><button class="text-btn" data-go="quotations">View quotations →</button>
+        </div>
+        <div class="grid three-col">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Quotations by category</h3>
+                <p>Quotation count by service</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="quoteCategoryChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Quotation value</h3>
+                <p>Estimated value by service</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="quoteValueChart"></canvas></div>
+          </article>
+          <article class="panel conversion-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Quote-to-deal rate</h3>
+                <p>Quotations converted to deals</p>
+              </div>
+            </div>
+            <div class="rate-circle" id="quoteRate">21.5%</div><strong id="quoteRateCaption">23 deals / 107 quotations</strong>
+            <p class="muted">Conversion rate for selected period</p>
+          </article>
+        </div>
+        <article class="panel table-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Service-wise quotation details</h3>
+              <p>Click a row to view related leads and deals</p>
+            </div><input class="search-input" id="quoteSearch" placeholder="Search service..." />
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Service / category</th>
+                  <th>Quotes</th>
+                  <th>Quoted amount</th>
+                  <th>Accepted</th>
+                  <th>Pending</th>
+                  <th>Conversion</th>
+                </tr>
+              </thead>
+              <tbody id="quoteTable"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-block" id="dealsSection">
+        <div class="section-title">
+          <div>
+            <h2>Deals & revenue</h2>
+            <p>Understand revenue, collections and deal progress</p>
+          </div><button class="text-btn" data-go="deals">View deals →</button>
+        </div>
+        <div class="kpi-grid revenue-kpis" id="revenueKpis"></div>
+        <div class="grid two-col">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Revenue by service</h3>
+                <p>Deal revenue across service categories</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="revenueServiceChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Daily revenue trend</h3>
+                <p>Revenue compared with collections</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="revenueTrendChart"></canvas></div>
+          </article>
+        </div>
+        <div class="grid two-col lower-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Priority breakdown</h3>
+                <p>Deals grouped by priority</p>
+              </div>
+            </div>
+            <div class="chart-wrap short"><canvas id="priorityChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Deal progress</h3>
+                <p>Progress by deal</p>
+              </div>
+            </div>
+            <div id="dealProgress" class="progress-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="ordersSection">
+        <div class="section-title">
+          <div>
+            <h2>Orders & payments</h2>
+            <p>Monitor order completion and payment collection</p>
+          </div><button class="text-btn" data-go="orders">View orders →</button>
+        </div>
+        <div class="grid two-col">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Order status</h3>
+                <p>Orders by current stage</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="orderStatusChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Payment history</h3>
+                <p>Recent transactions for demo deals</p>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Payment ID</th>
+                    <th>Deal / lead</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="paymentTable"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+        <article class="panel table-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Order register</h3>
+              <p>Select an order to see its linked deal and lead</p>
+            </div><select id="orderStatusFilter">
+              <option value="all">All statuses</option>
+              <option>In progress</option>
+              <option>Completed</option>
+              <option>Pending</option>
+            </select>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer / lead</th>
+                  <th>Service</th>
+                  <th>Deal value</th>
+                  <th>Progress</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="orderTable"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-block" id="detailsSection">
+        <div class="section-title">
+          <div>
+            <h2>Lead and deal register</h2>
+            <p>Drill down through the sample relationships: lead → quotations → deal → orders → payments</p>
+          </div><input class="search-input" id="leadSearch" placeholder="Search lead or company..." />
+        </div>
+        <article class="panel table-panel">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Lead</th>
+                  <th>Company</th>
+                  <th>Source</th>
+                  <th>Status</th>
+                  <th>Quotations</th>
+                  <th>Deal value</th>
+                  <th>Related records</th>
+                </tr>
+              </thead>
+              <tbody id="leadTable"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+      <footer>BizTrack Analytics <span>•</span> Demo dashboard with local dummy data</footer>
+    </main>
+  </div>
+
+  <dialog id="detailDialog" class="detail-dialog">
+    <div class="dialog-heading">
+      <div>
+        <p class="eyebrow">RECORD DETAILS</p>
+        <h2 id="dialogTitle">Record details</h2>
+      </div><button class="icon-btn" id="closeDialog">✕</button>
+    </div>
+    <div id="dialogBody"></div>
+  </dialog>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
